@@ -1,0 +1,15 @@
+server:
+  port: 9096
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/CMP1611-matheus-ana-ismael
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 10
+
+
+
