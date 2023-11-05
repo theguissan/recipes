@@ -16,12 +16,54 @@ repositories {
 }
 
 dependencies {
+//    implementation 'org.springframework.boot:spring-boot-starter-web'
+//    runtimeOnly 'org.postgresql:postgresql'
+//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//    implementation 'javax.persistence:javax.persistence-api:2.2'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+//    implementation 'org.springframework.boot:spring-boot-starter-validation'
+//    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jdbc', version: '3.1.5'
+//    implementation 'org.springframework:spring-tx:6.0.13'
+////    annotationProcessor group: 'org.hibernate', name: 'hibernate-jpamodelgen', version: '5.4.30.Final'
+//    annotationProcessor group: 'org.hibernate', name: 'hibernate-jpamodelgen', version: '6.3.1.Final'
+//    implementation 'org.springframework.data:spring-data-jpa:3.1.5'
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    implementation 'javax.persistence:javax.persistence-api:2.2'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'
+    annotationProcessor group: 'org.hibernate', name: 'hibernate-jpamodelgen', version: '6.3.1.Final'
+    implementation 'org.hibernate.orm:hibernate-core:6.3.1.Final'
+
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+def JPA_MODELGEN_PATH = 'src/jpaModelgen/java'
+
+sourceSets {
+    main {
+        java {
+            srcDir JPA_MODELGEN_PATH
+        }
+    }
+}
+
+task cleanJpaModelgen {
+    doLast {
+        project.delete(JPA_MODELGEN_PATH)
+    }
+}
+
+tasks.withType(JavaCompile) {
+    def jpaModelgenDir = file(JPA_MODELGEN_PATH)
+    options.annotationProcessorGeneratedSourcesDirectory = jpaModelgenDir
+    outputs.dir(jpaModelgenDir)
+}
+
+clean.dependsOn('cleanJpaModelgen')
+compileJava.dependsOn('cleanJpaModelgen')

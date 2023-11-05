@@ -11,5 +11,15 @@ spring:
       maximum-pool-size: 20
       minimum-idle: 10
 
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        ddl-auto: none
+        temp:
+          use_jdbc_metadata_defaults: false
+    show-sql: true
+
 
 
