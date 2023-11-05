@@ -4,9 +4,9 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 
 @Embeddable
 public class RestauranteCozinheiroId implements Serializable {
@@ -19,20 +19,18 @@ public class RestauranteCozinheiroId implements Serializable {
     private Restaurante restaurante;
     
     @OneToOne(optional = false)
-    @JoinColumn(name = "cod_coz_restcoz",  nullable = false)
+    @JoinColumn(name = "cod_coz_restcoz", nullable = false)
     private Cozinheiro cozinheiro;
     
     public RestauranteCozinheiroId() {}
     
-    public Cozinheiro getCozinheiro() 
-    {
+    public Cozinheiro getCozinheiro() {
         return this.cozinheiro;
     }
     
     public void setCozinheiro(final Cozinheiro cozinheiro) {
         this.cozinheiro = cozinheiro;
     }
-    
     
     @Override
     public boolean equals(final Object o) {

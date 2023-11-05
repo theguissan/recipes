@@ -1,12 +1,12 @@
 package br.com.theguissan.recipes.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "restaurante")
@@ -14,7 +14,7 @@ public class Restaurante {
     
     @Id
     @SequenceGenerator(name = "restaurante_seq", sequenceName = "restaurante_cod_rest_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="restaurante_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "restaurante_seq")
     @Column(name = "cod_rest", nullable = false)
     private Integer codigo;
     

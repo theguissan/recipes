@@ -1,14 +1,14 @@
 package br.com.theguissan.recipes.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "editor")
-public class Editor extends Funcionario{
-
-    @Column(name= "ativo_edt", nullable = false)
+public class Editor extends Funcionario {
+    
+    @Column(name = "ativo_edt", nullable = false)
     private Boolean ativo;
     
     public Boolean getAtivo() {

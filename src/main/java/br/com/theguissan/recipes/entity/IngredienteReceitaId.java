@@ -4,12 +4,10 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 
-import br.com.theguissan.recipes.entity.Receita;
-import br.com.theguissan.recipes.entity.Ingrediente;
 @Embeddable
 public class IngredienteReceitaId implements Serializable {
     
@@ -18,7 +16,7 @@ public class IngredienteReceitaId implements Serializable {
     
     @OneToOne(optional = false)
     @JoinColumn(name = "cod_rec_ingrec", nullable = false)
-    private  Receita  receita;
+    private Receita receita;
     
     @OneToOne(optional = false)
     @JoinColumn(name = "cod_ing_ingrec", nullable = false)

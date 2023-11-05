@@ -1,17 +1,15 @@
 package br.com.theguissan.recipes.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "cozinheiro")
-public class Cozinheiro extends Funcionario{
+public class Cozinheiro extends Funcionario {
     
-    
-    @Column(name = "nome_fantasia_coz", nullable = false)
+    @Column(name = "nome_fantasia", nullable = false)
     private String nomeFantasia;
-    
     
     @Column(name = "ativo_coz", nullable = false)
     private Boolean ativo;

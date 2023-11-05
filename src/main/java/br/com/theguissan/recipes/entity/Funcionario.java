@@ -3,18 +3,21 @@ package br.com.theguissan.recipes.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
 
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name = "funcionario")
 public class Funcionario {
     
     @Id
     @Column(name = "cpf_fun", nullable = false)
-    private Integer cpf;
+    private Long cpf;
     
     @Column(name = "nome_fun", nullable = false)
     private String nome;
@@ -22,14 +25,14 @@ public class Funcionario {
     @Column(name = "dt_contrato_fun", nullable = false)
     private LocalDate dataDoContrato;
     
-    @Column(name= "salario_fun", nullable = true)
+    @Column(name = "salario_fun", nullable = true)
     private BigDecimal salario;
     
-    public Integer getCpf() {
+    public Long getCpf() {
         return this.cpf;
     }
     
-    public void setCpf(final Integer cpf) {
+    public void setCpf(final Long cpf) {
         this.cpf = cpf;
     }
     

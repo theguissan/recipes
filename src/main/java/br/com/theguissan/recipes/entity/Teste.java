@@ -2,15 +2,10 @@ package br.com.theguissan.recipes.entity;
 
 import java.time.LocalDate;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "teste")
@@ -18,7 +13,6 @@ public class Teste {
     
     @EmbeddedId
     private TesteId codigo;
-    
     
     @Column(name = "dt_test", nullable = false)
     private LocalDate dataDoTeste;
