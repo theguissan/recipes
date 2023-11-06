@@ -16,10 +16,8 @@ public class FuncionarioForm {
     @NotNull(message = "Data do contrato é obrigatório")
     protected LocalDate dataDoContrato;
     
-    @NotNull(message = "Salário é obrigatório")
     protected BigDecimal salario;
     
-    @NotNull(message = "Ativo é obrigatório")
     protected Boolean ativo;
     
     public FuncionarioForm() {}

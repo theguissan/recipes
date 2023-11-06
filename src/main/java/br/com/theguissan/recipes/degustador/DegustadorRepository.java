@@ -36,10 +36,6 @@ public class DegustadorRepository extends AbstractRepository<Degustador, Degusta
         return this.getPorCodigo(DegustadorDto.class, this::getSelection, this.applier(chave));
     }
     
-    @Override
-    public void insert(final Degustador entity) {
-        this.insert(entity);
-    }
     
     private WhereApplierInterface<Degustador> applier(final Long chave) {
         return (final Root<Degustador> entidade) -> {
