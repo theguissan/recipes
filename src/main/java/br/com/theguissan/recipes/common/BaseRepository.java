@@ -1,5 +1,6 @@
 package br.com.theguissan.recipes.common;
 
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -7,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
 
+@Component
 @Transactional(propagation = Propagation.MANDATORY)
 public class BaseRepository {
     
