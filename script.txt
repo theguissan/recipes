@@ -1,0 +1,145 @@
+-- <Criação das tabelas>
+CREATE TABLE IF NOT EXISTS FUNCIONARIO (
+    cpf_fun BIGINT NOT NULL UNIQUE,
+    nome_fun VARCHAR(80) NOT NULL,
+    dt_contrato_fun DATE NOT NULL,
+    salario_fun DECIMAL(8, 2),
+    CONSTRAINT pk_cpf_fun PRIMARY KEY (cpf_fun)
+);
+
+CREATE TABLE IF NOT EXISTS COZINHEIRO (
+    nome_fantasia VARCHAR(80),
+	ativo_coz boolean default true
+)INHERITS (FUNCIONARIO);
+
+CREATE TABLE IF NOT EXISTS DEGUSTADOR (
+	ativo_deg boolean default true
+)INHERITS (FUNCIONARIO);
+
+CREATE TABLE IF NOT EXISTS EDITOR (
+	ativo_edt boolean default true
+)INHERITS (FUNCIONARIO);
+
+--<Criação de sequence>
+CREATE SEQUENCE IF NOT EXISTS categoria_receita_cod_cat_rec_seq;
+--</Criação de sequence>
+CREATE TABLE IF NOT EXISTS CATEGORIA_RECEITA (
+    cod_cat_rec INT NOT NULL DEFAULT nextval('categoria_receita_cod_cat_rec_seq'),
+    desc_cat_rec VARCHAR(40) NOT NULL,
+    CONSTRAINT pk_cod_cat_rec PRIMARY KEY (cod_cat_rec)
+);
+--<Definindo donos da sequence>
+ALTER SEQUENCE categoria_receita_cod_cat_rec_seq OWNED BY CATEGORIA_RECEITA.cod_cat_rec;
+--</Definindo donos da sequence>
+
+--<Criação de sequence>
+CREATE SEQUENCE IF NOT EXISTS restaurante_cod_rest_seq;
+--</Criação de sequence>
+CREATE TABLE IF NOT EXISTS RESTAURANTE (
+	cod_rest INT NOT NULL DEFAULT nextval('restaurante_cod_rest_seq'),
+    nome_rest VARCHAR(80) NOT NULL,
+    CONSTRAINT pk_cod_rest PRIMARY KEY (cod_rest)
+);
+--<Definindo donos da sequence>
+ALTER SEQUENCE restaurante_cod_rest_seq OWNED BY RESTAURANTE.cod_rest;
+--</Definindo donos da sequence>
+
+CREATE TABLE IF NOT EXISTS LIVRO (
+	isbn INT NOT NULL,
+    titulo_livro VARCHAR(200) NOT NULL UNIQUE,
+	cpf_edit BIGINT NOT NULL,
+    CONSTRAINT pk_isbn PRIMARY KEY (isbn),
+	CONSTRAINT fk_editor_livro FOREIGN KEY (cpf_edit) REFERENCES FUNCIONARIO (cpf_fun)
+);
+
+--<Criação de sequence>
+CREATE SEQUENCE IF NOT EXISTS ingrediente_cod_ingred_seq;
+--</Criação de sequence>
+CREATE TABLE IF NOT EXISTS INGREDIENTE (
+    cod_ingred INT NOT NULL DEFAULT nextval('ingrediente_cod_ingred_seq'),
+    nome_ingred VARCHAR(40) NOT NULL UNIQUE,
+	desc_ingred VARCHAR(150),
+    CONSTRAINT pk_cod_ingred PRIMARY KEY (cod_ingred)
+);
+--<Definindo donos da sequence>
+ALTER SEQUENCE ingrediente_cod_ingred_seq OWNED BY INGREDIENTE.cod_ingred;
+--</Definindo donos da sequence>
+
+CREATE TABLE IF NOT EXISTS RESTAURANTE_COZINHEIRO (
+    cod_coz_restcoz BIGINT NOT NULL,
+    cod_rest_restcoz INT NOT NULL,
+    dt_contratacao DATE NOT NULL,
+    CONSTRAINT pk_cod_coz_restcoz_cod_rest_restcoz PRIMARY KEY (cod_coz_restcoz, cod_rest_restcoz),
+    CONSTRAINT fk_cozinheiro_restcoz FOREIGN KEY (cod_coz_restcoz) REFERENCES FUNCIONARIO (cpf_fun),
+    CONSTRAINT fk_restaurante_restcoz FOREIGN KEY (cod_rest_restcoz) REFERENCES RESTAURANTE (cod_rest)
+);
+
+--<Criação de sequence>
+CREATE SEQUENCE IF NOT EXISTS receita_cod_rec_seq;
+--</Criação de sequence>
+CREATE TABLE IF NOT EXISTS RECEITA (
+    cod_rec INT NOT NULL DEFAULT nextval('receita_cod_rec_seq'),
+    nome_rec VARCHAR(80) NOT NULL,
+    dt_criacao_rec DATE NOT NULL,
+    cod_categoria_rec INT NOT NULL,
+    cpf_coz BIGINT NOT NULL,
+    isbn_rec INT NOT NULL,
+	desc_rec TEXT,
+	porcoes_rec INT,
+    CONSTRAINT pk_cod_rec PRIMARY KEY (cod_rec),
+    CONSTRAINT fk_categoria_receita FOREIGN KEY (cod_categoria_rec) REFERENCES CATEGORIA_RECEITA (cod_cat_rec),
+    CONSTRAINT fk_cozinheiro_receita FOREIGN KEY (cpf_coz) REFERENCES FUNCIONARIO (cpf_fun),
+    CONSTRAINT fk_livro_receita FOREIGN KEY (isbn_rec) REFERENCES LIVRO (isbn),
+	UNIQUE(nome_rec, cpf_coz) --RN2
+);
+--<Definindo donos da sequence>
+ALTER SEQUENCE receita_cod_rec_seq OWNED BY RECEITA.cod_rec;
+--</Definindo donos da sequence>
+
+CREATE TABLE IF NOT EXISTS INGREDIENTE_RECEITA (
+    cod_rec_ingrec INT NOT NULL,
+    cod_ing_ingrec INT NOT NULL,
+    quant_ingrec DECIMAL(4, 2) NOT NULL,
+    med_ingrec VARCHAR(10),
+    CONSTRAINT pk_cod_rec_ingred_cod_ing_ingred PRIMARY KEY (cod_rec_ingrec, cod_ing_ingrec),
+    CONSTRAINT fk_receita_ingred FOREIGN KEY (cod_rec_ingrec) REFERENCES RECEITA (cod_rec),
+    CONSTRAINT fk_ingrediente_ingred FOREIGN KEY (cod_ing_ingrec) REFERENCES INGREDIENTE (cod_ingred)
+);
+COMMENT ON COLUMN INGREDIENTE_RECEITA.med_ingrec IS 'colher de chá, xícara, ml...';
+
+--</Criação de sequence>
+CREATE TABLE IF NOT EXISTS TESTE (
+    cpf_deg_test BIGINT NOT NULL,
+	cod_rec_test INT NOT NULL,
+	dt_test DATE NOT NULL,
+	nota_test DECIMAL NOT NULL,
+	CONSTRAINT pk_teste PRIMARY KEY (cpf_deg_test, cod_rec_test),
+    CONSTRAINT fk_receita_teste FOREIGN KEY (cod_rec_test) REFERENCES RECEITA (cod_rec),
+    CONSTRAINT fk_degustador_teste FOREIGN KEY (cpf_deg_test) REFERENCES FUNCIONARIO (cpf_fun)
+);
+--</Criação das tabelas>
+
+--<RESTRIÇÕES: regras de negócio>
+CREATE OR REPLACE FUNCTION check_primeira_receita_prazo()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.cpf_coz IS NOT NULL THEN
+    -- Verifica se o cozinheiro tem pelo menos uma receita
+    IF (SELECT COUNT(*) FROM RECEITA WHERE cpf_coz = NEW.cpf_coz) = 0 THEN -- primeira receita
+      -- Verifica se o cozinheiro está dentro do prazo
+      IF NEW.dt_criacao_rec > (SELECT dt_contrato_fun FROM COZINHEIRO WHERE cpf_fun = NEW.cpf_coz) + INTERVAL '45 days' THEN
+        RAISE EXCEPTION 'Um cozinheiro recém-contratado tem até 45 dias para entregar sua primeira receita. Após esse período, não é permitido.';
+        RETURN NULL;
+      END IF;
+    END IF;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER trigger_check_primeira_receita_prazo
+BEFORE INSERT ON RECEITA
+FOR EACH ROW
+EXECUTE FUNCTION check_primeira_receita_prazo();
+--</RESTRIÇÕES: regras de negócio>
