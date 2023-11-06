@@ -6,8 +6,7 @@ import java.time.LocalDate;
 import br.com.theguissan.recipes.common.FuncionarioDto;
 
 public class DegustadorDto extends FuncionarioDto {
-    
-    private Boolean ativo;
+
     
     public DegustadorDto(
             final Long cpf,
@@ -15,16 +14,13 @@ public class DegustadorDto extends FuncionarioDto {
             final LocalDate dataDoContrato,
             final BigDecimal salario,
             final Boolean ativo) {
-        super(cpf, nome, dataDoContrato, salario);
-        this.ativo = ativo;
+        super(
+                cpf,
+                nome,
+                dataDoContrato,
+                salario,
+                ativo);
     }
-    
-    public Boolean getAtivo() {
-        return this.ativo;
-    }
-    
-    public void setAtivo(final Boolean ativo) {
-        this.ativo = ativo;
-    }
+
     
 }

@@ -9,8 +9,6 @@ public class CozinheiroDto extends FuncionarioDto {
     
     private String nomeFantasia;
     
-    private Boolean ativo;
-    
     public CozinheiroDto(
             final Long cpf,
             final String nome,
@@ -18,9 +16,8 @@ public class CozinheiroDto extends FuncionarioDto {
             final BigDecimal salario,
             final String nomeFantasia,
             final Boolean ativo) {
-        super(cpf, nome, dataDoContrato, salario);
+        super(cpf, nome, dataDoContrato, salario, ativo);
         this.nomeFantasia = nomeFantasia;
-        this.ativo = ativo;
     }
     
     public String getNomeFantasia() {
@@ -29,14 +26,6 @@ public class CozinheiroDto extends FuncionarioDto {
     
     public void setNomeFantasia(final String nomeFantasia) {
         this.nomeFantasia = nomeFantasia;
-    }
-    
-    public Boolean getAtivo() {
-        return this.ativo;
-    }
-    
-    public void setAtivo(final Boolean ativo) {
-        this.ativo = ativo;
     }
     
 }

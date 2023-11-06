@@ -13,15 +13,19 @@ public class FuncionarioDto {
     
     private BigDecimal salario;
     
+    private Boolean ativo;
+    
     public FuncionarioDto(
             final Long cpf,
             final String nome,
             final LocalDate dataDoContrato,
-            final BigDecimal salario) {
+            final BigDecimal salario,
+            final Boolean ativo) {
         this.cpf = cpf;
         this.nome = nome;
         this.dataDoContrato = dataDoContrato;
         this.salario = salario;
+        this.ativo = ativo;
     }
     
     public Long getCpf() {
@@ -54,6 +58,14 @@ public class FuncionarioDto {
     
     public void setSalario(final BigDecimal salario) {
         this.salario = salario;
+    }
+    
+    public Boolean getAtivo() {
+        return this.ativo;
+    }
+    
+    public void setAtivo(final Boolean ativo) {
+        this.ativo = ativo;
     }
     
 }
