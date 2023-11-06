@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 public class Funcionario {
     
     @Id
-    @Column(name = "cpf_fun", nullable = false)
+    @Column(name = "cpf_fun", nullable = false, unique = true)
     private Long cpf;
     
     @Column(name = "nome_fun", nullable = false)
