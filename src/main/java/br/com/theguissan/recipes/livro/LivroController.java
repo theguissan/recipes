@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.theguissan.recipes.common.StandardApiInterface;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/livro")
@@ -35,7 +36,7 @@ public class LivroController implements StandardApiInterface<LivroDto, LivroForm
     
     @Override
     @PostMapping
-    public Integer insert(@RequestBody final LivroForm form) {
+    public Integer insert(@RequestBody @Valid final LivroForm form) {
         return this.livroService.insert(form);
     }
     
