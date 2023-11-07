@@ -51,6 +51,8 @@ public class LivroService extends AbstractService<Livro, LivroDto, LivroForm, In
         
         final Livro entity = this.livroRepository.findById(chave);
         
+        NotFoundException.lancarSe(Optional.ofNullable(entity).isEmpty(), "Livro não encontrado");
+        
         form.Fill(entity);
         
         if (form.getCpfDoEditor() != null && !form.getCpfDoEditor().equals(entity.getEditor().getCpf())) {
