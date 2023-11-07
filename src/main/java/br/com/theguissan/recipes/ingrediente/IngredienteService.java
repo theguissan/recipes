@@ -1,11 +1,14 @@
 package br.com.theguissan.recipes.ingrediente;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.theguissan.recipes.common.AbstractRepository;
 import br.com.theguissan.recipes.common.AbstractService;
+import br.com.theguissan.recipes.common.exceptions.NotFoundException;
 import br.com.theguissan.recipes.entity.Ingrediente;
 
 @Service
@@ -33,6 +36,8 @@ public class IngredienteService extends AbstractService<Ingrediente, Ingrediente
     public void update(final Integer chave, final IngredienteForm form) {
         
         final Ingrediente entity = this.ingredienteRepository.findById(chave);
+        
+        NotFoundException.lancarSe(Optional.ofNullable(entity).isEmpty(), "Ingrediente não encontrado.");
         
         form.Fill(entity);
         
