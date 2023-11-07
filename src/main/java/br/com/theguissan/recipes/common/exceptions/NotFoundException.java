@@ -18,4 +18,12 @@ public class NotFoundException extends RuntimeException {
         super(cause);
     }
     
+    public static void lancarSe(final boolean eParaLancar, final String mensagem) {
+        
+        if (eParaLancar) {
+            
+            throw new NotFoundException(mensagem);
+        }
+    }
+    
 }
