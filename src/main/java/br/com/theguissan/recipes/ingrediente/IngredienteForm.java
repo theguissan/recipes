@@ -13,7 +13,6 @@ import jakarta.validation.constraints.NotNull;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class IngredienteForm implements BaseForm<Ingrediente> {
     
-    @NotNull(message = "O código do ingrediente é obrigatório")
     private Integer codigo;
     
     @NotNull(message = "O nome do ingrediente é obrigatório")

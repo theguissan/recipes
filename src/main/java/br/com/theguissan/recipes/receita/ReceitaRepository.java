@@ -14,6 +14,7 @@ import br.com.theguissan.recipes.entity.Livro_;
 import br.com.theguissan.recipes.entity.Receita;
 import br.com.theguissan.recipes.entity.Receita_;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -71,6 +72,27 @@ public class ReceitaRepository extends AbstractRepository<Receita, ReceitaDto, R
         criteria.where(this.cb().equal(from.get(Receita_.cozinheiro).get(Cozinheiro_.cpf), cpfDoCozinheiro));
         
         return this.entityManager.createQuery(criteria).getSingleResult();
+    }
+    
+    public Optional<Integer> isTituloDeReceitaJaPublicadaPorCozinheiro(final Long cpfDoCozinheiro, final String titulo) {
+        
+        final CriteriaQuery<Integer> criteria = this.cb().createQuery(Integer.class);
+        
+        final Root<Receita> from = criteria.from(Receita.class);
+        
+        criteria.select(from.get(Receita_.codigo));
+        
+        criteria.where(
+                this.cb().equal(from.get(Receita_.cozinheiro).get(Cozinheiro_.cpf), cpfDoCozinheiro),
+                this.cb().equal(from.get(Receita_.nome), titulo));
+        
+        try {
+            
+            return Optional.of(this.entityManager.createQuery(criteria).getSingleResult());
+        } catch (final NoResultException e) {
+            return Optional.empty();
+        }
+        
     }
     
 }

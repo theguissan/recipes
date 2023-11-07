@@ -18,6 +18,8 @@ import br.com.theguissan.recipes.livro.LivroRepository;
 @Service
 public class ReceitaService extends AbstractService<Receita, ReceitaDto, ReceitaForm, Integer> {
     
+    public static final int MINIMUM_DAY_PERIOD = 45;
+    
     @Autowired
     private ReceitaRepository receitaRepository;
     
@@ -45,9 +47,12 @@ public class ReceitaService extends AbstractService<Receita, ReceitaDto, Receita
                         .orElseThrow(() -> new NotFoundException("Cozinheiro não encontrado")));
         
         if (this.receitaRepository.buscarQuantidadeDeReceitasDeCozinheiro(form.getCpfDoCozinheiro()) == 0) {
-            BussinessException.lancarSe(entity.getDataDeCriacao().isAfter(entity.getCozinheiro().getDataDoContrato().plusDays(45)),
+            BussinessException.lancarSe(entity.getDataDeCriacao().isAfter(entity.getCozinheiro().getDataDoContrato().plusDays(MINIMUM_DAY_PERIOD)),
                                         "Um cozinheiro recém-contratado tem até 45 dias para entregar sua primeira receita. Após esse período, não é permitido.");
         }
+        
+        BussinessException.lancarSe(this.receitaRepository.isTituloDeReceitaJaPublicadaPorCozinheiro(form.getCpfDoCozinheiro(), form.getNome()).isPresent(),
+                                    "Um cozinheiro não pode publicar duas receitas com o mesmo nome.");
         
         entity.setLivro(
                 Optional.ofNullable(this.livroRepository.findById(form.getIsbnDoLivro()))
@@ -69,6 +74,11 @@ public class ReceitaService extends AbstractService<Receita, ReceitaDto, Receita
         final Receita entity = this.receitaRepository.findById(chave);
         
         NotFoundException.lancarSe(Optional.ofNullable(entity).isEmpty(), "Receita não encontrada");
+        
+        final Optional<Integer> receitaJaPublicada = this.receitaRepository.isTituloDeReceitaJaPublicadaPorCozinheiro(form.getCpfDoCozinheiro(), form.getNome());
+        
+        BussinessException.lancarSe(receitaJaPublicada.isPresent() && !receitaJaPublicada.get().equals(chave),
+                                    "Um cozinheiro não pode publicar duas receitas com o mesmo nome.");
         
         form.Fill(entity);
         
