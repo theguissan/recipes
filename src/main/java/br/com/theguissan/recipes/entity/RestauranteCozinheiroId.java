@@ -12,7 +12,7 @@ import jakarta.persistence.OneToOne;
 public class RestauranteCozinheiroId implements Serializable {
     
     @Serial
-    private static final long serialVersionUID = -5688316731692701172L;
+    private static final long serialVersionUID = 4865589137759551202L;
     
     @OneToOne(optional = false)
     @JoinColumn(name = "cod_rest_restcoz", nullable = false)
@@ -30,6 +30,14 @@ public class RestauranteCozinheiroId implements Serializable {
     
     public void setCozinheiro(final Cozinheiro cozinheiro) {
         this.cozinheiro = cozinheiro;
+    }
+    
+    public Restaurante getRestaurante() {
+        return this.restaurante;
+    }
+    
+    public void setRestaurante(final Restaurante restaurante) {
+        this.restaurante = restaurante;
     }
     
     @Override

@@ -23,6 +23,9 @@ public class CozinheiroService extends AbstractService<Cozinheiro, CozinheiroDto
     
     @Override
     @Transactional
+    
+    //    TODO inserir tambem o cozinheiro em funcionario ao cadastrar para evitar erro caso ele seja usado em restaurante-cozinheiro
+    
     public Long insert(final CozinheiroForm form) {
         
         final Optional<Cozinheiro> cozinheiro = Optional.ofNullable(this.cozinheiroRepository.findById(form.getCpf()));
