@@ -1,5 +1,6 @@
 package br.com.theguissan.recipes.degustador;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,13 +9,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.theguissan.recipes.common.AbstractService;
 import br.com.theguissan.recipes.common.exceptions.BussinessException;
+import br.com.theguissan.recipes.common.exceptions.NotFoundException;
 import br.com.theguissan.recipes.entity.Degustador;
+import br.com.theguissan.recipes.entity.Funcionario;
+import br.com.theguissan.recipes.funcionario.FuncionarioRepository;
 
 @Service
 public class DegustadorService extends AbstractService<Degustador, DegustadorDto, DegustadorForm, Long> {
     
     @Autowired
     private DegustadorRepository degustadorRepository;
+    
+    @Autowired
+    private FuncionarioRepository funcionarioRepository;
     
     protected DegustadorService(final DegustadorRepository repository) {
         super(repository);
@@ -30,7 +37,15 @@ public class DegustadorService extends AbstractService<Degustador, DegustadorDto
             throw new BussinessException("Cpf já cadastrado");
         }
         
+        final Funcionario funcionario = this.funcionarioRepository.findById(form.getCpf());
+        
+        if (Objects.nonNull(funcionario)) {
+            this.funcionarioRepository.insert(form.toFuncionarioEntity());
+        }
+        
         final Degustador entity = form.toEntity();
+        
+        this.funcionarioRepository.insert(funcionario);
         
         this.degustadorRepository.insert(entity);
         
@@ -43,7 +58,17 @@ public class DegustadorService extends AbstractService<Degustador, DegustadorDto
         
         final Degustador entity = this.degustadorRepository.findById(chave);
         
+        NotFoundException.lancarSe(Optional.ofNullable(entity).isEmpty(), "Degustador não encontrado");
+        
         form.Fill(entity);
+        
+        final Funcionario funcionario = this.funcionarioRepository.findById(chave);
+        
+        NotFoundException.lancarSe(Optional.ofNullable(funcionario).isEmpty(), "Funcionario não encontrado");
+        
+        form.fillFuncionario(funcionario);
+        
+        this.funcionarioRepository.merge(funcionario);
         
         this.degustadorRepository.merge(entity);
     }
@@ -52,6 +77,7 @@ public class DegustadorService extends AbstractService<Degustador, DegustadorDto
     @Transactional
     public void delete(final Long chave) {
         this.degustadorRepository.delete(chave);
+        this.funcionarioRepository.delete(chave);
     }
     
 }

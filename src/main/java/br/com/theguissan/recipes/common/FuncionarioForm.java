@@ -3,6 +3,7 @@ package br.com.theguissan.recipes.common;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import br.com.theguissan.recipes.entity.Funcionario;
 import jakarta.validation.constraints.NotNull;
 
 public class FuncionarioForm {
@@ -60,6 +61,34 @@ public class FuncionarioForm {
     
     public void setAtivo(final Boolean ativo) {
         this.ativo = ativo;
+    }
+    
+    public Funcionario toFuncionarioEntity() {
+        
+        final Funcionario entity = new Funcionario();
+        
+        entity.setCpf(this.cpf);
+        entity.setNome(this.nome);
+        entity.setDataDoContrato(this.dataDoContrato);
+        entity.setSalario(this.salario);
+        
+        return entity;
+    }
+    
+    public void fillFuncionario(final Funcionario entity) {
+        
+        if (this.nome != null) {
+            entity.setNome(this.nome);
+        }
+        
+        if (this.dataDoContrato != null) {
+            entity.setDataDoContrato(this.dataDoContrato);
+        }
+        
+        if (this.salario != null) {
+            entity.setSalario(this.salario);
+        }
+        
     }
     
 }
