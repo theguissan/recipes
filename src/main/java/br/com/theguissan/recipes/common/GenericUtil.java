@@ -2,6 +2,8 @@ package br.com.theguissan.recipes.common;
 
 import java.lang.reflect.ParameterizedType;
 
+import org.springframework.data.util.CastUtils;
+
 public final class GenericUtil {
     
     private static final int PRIMEIRO_ARGUMENTO = 0;
@@ -12,7 +14,7 @@ public final class GenericUtil {
         if (classe != null && classe.getGenericSuperclass() != null) {
             try {
                 
-                return (Class<E>) ((ParameterizedType) classe.getGenericSuperclass()).getActualTypeArguments()[PRIMEIRO_ARGUMENTO];
+                return CastUtils.cast(((ParameterizedType) classe.getGenericSuperclass()).getActualTypeArguments()[PRIMEIRO_ARGUMENTO]);
                 
             } catch (final ClassCastException e) {
                 throw new ClassCastException("A classe do diamente não pode ser inferida");
