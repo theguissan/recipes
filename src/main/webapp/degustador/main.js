@@ -1,13 +1,20 @@
 function buscar() {
 
-    var backendURL = "http://localhost:9096/cozinheiro"
+    var backendURL = "http://localhost:9096/degustador/maiores-degustadores"
+
+
+    const objeto = {
+        primeiroIngrediente : document.getElementById("primeiroIngrediente").value,
+        segundoIngrediente : document.getElementById("segundoIngrediente").value
+    }
 
 
     fetch(backendURL, {
-        method: "GET",
+        method: "POST",
         headers: {
             "Content-Type": "application/json",  
         },
+        body: JSON.stringify(objeto)
     })
     .then(response => {
         if (!response.ok) {
