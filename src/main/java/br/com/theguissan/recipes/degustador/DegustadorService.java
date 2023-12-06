@@ -1,5 +1,6 @@
 package br.com.theguissan.recipes.degustador;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -78,6 +79,11 @@ public class DegustadorService extends AbstractService<Degustador, DegustadorDto
     public void delete(final Long chave) {
         this.degustadorRepository.delete(chave);
         this.funcionarioRepository.delete(chave);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<DegustadorDto> getMaioresDegustadores(final DegustadorForm degustador) {
+        return this.getTodos();
     }
     
 }
