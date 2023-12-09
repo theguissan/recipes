@@ -1,5 +1,6 @@
 package br.com.theguissan.recipes.categoriareceita;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,11 @@ public class CategoriaReceiteService extends AbstractService<CategoriaReceita, C
     @Transactional
     public void delete(final Integer chave) {
         this.categoriaReceitaRepository.delete(chave);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<CategoriaReceitaDto> buscarReceitasPorCategoria() {
+        return this.categoriaReceitaRepository.buscarReceitasPorCategoria();
     }
     
 }

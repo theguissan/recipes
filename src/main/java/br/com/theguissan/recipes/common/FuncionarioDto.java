@@ -5,15 +5,17 @@ import java.time.LocalDate;
 
 public class FuncionarioDto {
     
-    private Long cpf;
+    protected Long cpf;
     
-    private String nome;
+    protected String nome;
     
-    private LocalDate dataDoContrato;
+    protected LocalDate dataDoContrato;
     
-    private BigDecimal salario;
+    protected BigDecimal salario;
     
-    private Boolean ativo;
+    protected Boolean ativo;
+    
+    public FuncionarioDto() {}
     
     public FuncionarioDto(
             final Long cpf,
@@ -26,6 +28,10 @@ public class FuncionarioDto {
         this.dataDoContrato = dataDoContrato;
         this.salario = salario;
         this.ativo = ativo;
+    }
+    
+    public FuncionarioDto(final String nome) {
+        this.nome = nome;
     }
     
     public Long getCpf() {

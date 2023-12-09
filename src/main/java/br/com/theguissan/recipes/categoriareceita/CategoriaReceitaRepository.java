@@ -10,6 +10,8 @@ import br.com.theguissan.recipes.common.AbstractRepository;
 import br.com.theguissan.recipes.common.WhereApplierInterface;
 import br.com.theguissan.recipes.entity.CategoriaReceita;
 import br.com.theguissan.recipes.entity.CategoriaReceita_;
+import br.com.theguissan.recipes.entity.Receita_;
+import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Selection;
 
@@ -42,6 +44,32 @@ public class CategoriaReceitaRepository extends AbstractRepository<CategoriaRece
         return (final Root<CategoriaReceita> entidade) -> {
             return Arrays.asList(this.cb().equal(entidade.get(CategoriaReceita_.codigo), chave));
         };
+    }
+    
+    public List<CategoriaReceitaDto> buscarReceitasPorCategoria() {
+        
+        final CriteriaQuery<CategoriaReceitaDto> criteria = this.cb().createQuery(CategoriaReceitaDto.class);
+        
+        final Root<CategoriaReceita> from = criteria.from(CategoriaReceita.class);
+        
+        final CategoriaReceitaFromWrapper fromWrapper = new CategoriaReceitaFromWrapper(from);
+        
+        criteria.multiselect(this.montarCamposParaBuscarReceitasPorCategoria(fromWrapper));
+        
+        criteria.groupBy(from.get(CategoriaReceita_.codigo), from.get(CategoriaReceita_.descricao));
+        
+        criteria.orderBy(this.cb().asc(this.cb().count(fromWrapper.getJoinReceita().get(Receita_.codigo))));
+        
+        return this.getEntityManager().createQuery(criteria).getResultList();
+        
+    }
+    
+    private List<Selection<?>> montarCamposParaBuscarReceitasPorCategoria(final CategoriaReceitaFromWrapper from) {
+        return Arrays.asList(
+                from.getFrom().get(CategoriaReceita_.codigo),
+                from.getFrom().get(CategoriaReceita_.descricao),
+                this.cb().count(from.getJoinReceita().get(Receita_.codigo)).as(Long.class));
+        
     }
     
 }

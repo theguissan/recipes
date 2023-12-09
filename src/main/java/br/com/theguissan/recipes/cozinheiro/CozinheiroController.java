@@ -53,4 +53,10 @@ public class CozinheiroController implements StandardApiInterface<CozinheiroDto,
         this.cozinheiroService.delete(chave);
     }
     
+    @CrossOrigin
+    @GetMapping("/quantidade-de-receitas")
+    public List<CozinheiroDto> buscarCozinheiroPorQuantidadeDeReceitas() {
+        return this.cozinheiroService.buscarCozinheiroPorQuantidadeDeReceitas();
+    }
+    
 }

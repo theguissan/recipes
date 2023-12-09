@@ -1,5 +1,6 @@
 package br.com.theguissan.recipes.cozinheiro;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -80,6 +81,11 @@ public class CozinheiroService extends AbstractService<Cozinheiro, CozinheiroDto
     public void delete(final Long chave) {
         this.cozinheiroRepository.delete(chave);
         this.funcionarioRepository.delete(chave);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<CozinheiroDto> buscarCozinheiroPorQuantidadeDeReceitas() {
+        return this.cozinheiroRepository.buscarCozinheiroPorQuantidadeDeReceitas();
     }
     
 }

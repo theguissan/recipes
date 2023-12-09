@@ -3,6 +3,7 @@ package br.com.theguissan.recipes.categoriareceita;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,7 +51,12 @@ public class CategoriaReceitaController implements StandardApiInterface<Categori
     @DeleteMapping("/{chave}")
     public void delete(@PathVariable final Integer chave) {
         this.categoriaReceitaService.delete(chave);
-        
+    }
+    
+    @CrossOrigin
+    @GetMapping("/por-categoria")
+    public List<CategoriaReceitaDto> buscarReceitasPorCategoria() {
+        return this.categoriaReceitaService.buscarReceitasPorCategoria();
     }
     
 }
