@@ -44,7 +44,7 @@ public class TesteRepository extends BaseRepository {
         sql.append("          WHERE i.nome_ingred IN(:primeiroIngrediente, :segundoIngrediente) ");
         sql.append(" )                                                                          ");
         sql.append("                                                                            ");
-        sql.append("     SELECT DISTINCT :primeiroIngrediente as primeiroIngrediente,                    ");
+        sql.append("     SELECT DISTINCT :primeiroIngrediente as primeiroIngrediente,           ");
         sql.append("            :segundoIngrediente as segundoIngrediente,                      ");
         sql.append("            d.nome_fun as testador,                                         ");
         sql.append("            rs.nome_rec as receita,                                         ");
